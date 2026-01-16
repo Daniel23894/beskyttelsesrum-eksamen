@@ -1,5 +1,6 @@
 package org.example.beskyttelsesrumeksamen.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 @Entity
