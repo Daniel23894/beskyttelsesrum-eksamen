@@ -1,19 +1,24 @@
 package org.example.beskyttelsesrumeksamen.controller;
 
 import org.example.beskyttelsesrumeksamen.model.Beskyttelsesrum;
+import org.example.beskyttelsesrumeksamen.model.RoomDistanceDTO;
 import org.example.beskyttelsesrumeksamen.repository.BeskyttelsesrumRepository;
 import org.example.beskyttelsesrumeksamen.service.BeskyttelsesrumService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*")
 public class BeskyttelsesrumController {
     private final BeskyttelsesrumService beskyttelsesrumService;
+    private final BeskyttelsesrumRepository beskyttelsesrumRepository;
 
-    public BeskyttelsesrumController(BeskyttelsesrumService beskyttelsesrumService){
+    public BeskyttelsesrumController(BeskyttelsesrumService beskyttelsesrumService, BeskyttelsesrumRepository beskyttelsesrumRepository) {
         this.beskyttelsesrumService = beskyttelsesrumService;
+        this.beskyttelsesrumRepository = beskyttelsesrumRepository;
     }
 
     // CRUD OPERATIONER
@@ -78,6 +83,23 @@ public class BeskyttelsesrumController {
                 rum.getLatitude(),
                 rum.getLongitude()
         );
+    }
+
+    // Henter alle rum, beregner afstanden for hver, og sorterer dem
+    @GetMapping("/rooms/sorted")
+    public List<RoomDistanceDTO> getRoomsSortedByDistance(
+            @RequestParam double userLat,
+            @RequestParam double userLon) {
+
+        List<Beskyttelsesrum> allRooms = beskyttelsesrumRepository.findAll();
+
+        return allRooms.stream()
+                .map(room -> {
+                    double distance = beskyttelsesrumService.calculateDistance(userLat, userLon, room.getLatitude(), room.getLongitude());
+                    return new RoomDistanceDTO(room, distance);
+                })
+                .sorted(Comparator.comparingDouble(RoomDistanceDTO::getDistance))
+                .collect(Collectors.toList());
     }
 
 }
