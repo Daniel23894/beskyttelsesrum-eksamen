@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beredskabsstyrelsen - Beskyttelsesrum</title>
+    <link rel="stylesheet" href="/css/style.css"> 
+</head>
+<body>
+
+    <nav>
+        <button onclick="visSektion('sektion-rum')">Vis Rum per Kommune</button>
+        <button onclick="visSektion('sektion-kapacitet')">Vis Samlet Kapacitet</button>
+        <button onclick="visSektion('sektion-afstand')">Find Afstand (Del 4)</button>
+    </nav>
+
+    <div class="container">
+        <section id="sektion-rum">
+            <h2>Beskyttelsesrum per kommune</h2>
+            <div id="rum-liste-indhold">Indlæser data...</div>
+        </section>
+
+        <section id="sektion-kapacitet" class="hidden">
+            <h2>Kapacitetsoversigt</h2>
+            <table id="kapacitet-tabel">
+                <thead>
+                    <tr>
+                        <th>Kommune</th>
+                        <th>Antal Rum</th>
+                        <th>Total Kapacitet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </section>
+
+        <section id="sektion-afstand" class="hidden">
+            <h2>Beregn afstand til rum</h2>
+            <div class="form-group"> 
+                <input type="number" id="bruger-lat" placeholder="Latitude (f.eks. 55.67)" step="any">
+                <input type="number" id="bruger-lon" placeholder="Longitude (f.eks. 12.56)" step="any">
+                <select id="afstand-rum-select">
+                    <option value="">Vælg et rum...</option>
+                </select>
+            </div>
+            
+            <button class="action-btn" onclick="beregnAfstand()">Beregn Afstand</button>
+            <button class="action-btn" onclick="findNærmesteRum()">Find nærmeste rum (Sorteret liste)</button>
+            <div id="afstand-resultat" style="margin-top: 15px;"></div>
+        </section>
+    </div>
+
+    <script src="../js/script.js"></script>
+</body>
+</html>
