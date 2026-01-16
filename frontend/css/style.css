@@ -140,3 +140,29 @@ ul {
 li {
     margin-bottom: 5px;
 }
+
+/* Styling til slet-knappen */
+.delete-btn {
+    background-color: #e74c3c; /* Rød farve for "fare/slet" */
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    margin-left: 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background 0.3s ease;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b; /* Mørkere rød når musen er over */
+}
+
+/* Sørg for at liste-punkterne ser pæne ud med knappen */
+.kommune-kort li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Skubber knappen ud til højre */
+    max-width: 500px;
+}
