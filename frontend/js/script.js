@@ -37,13 +37,12 @@ async function hentAltData() {
     }
 }
 
-// DEL 3a: Liste over kommuner og deres rum
+// DEL 3a: Liste over kommuner og deres rum med slet-knap
 function bygVisning3a() {
     const container = document.getElementById('rum-liste-indhold');
-    container.innerHTML = ""; // Fjern indhold inde i elementet
+    container.innerHTML = ""; 
 
     kommuner.forEach(k => {
-        // for hvert komunne, find alle rum der tilhører
         const rumIKommune = rum.filter(r => r.kommune.id === k.id);
 
         let html = `<div class="kommune-kort">
@@ -51,9 +50,12 @@ function bygVisning3a() {
         
         if (rumIKommune.length > 0) {
             html += "<ul>";
-            // Lav en liste-linje for hvert rum
             rumIKommune.forEach(r => {
-                html += `<li>${r.adresse} - Plads til: ${r.kapacitet}</li>`;
+                // Her kombinerer vi din tekst med den nye slet-knap
+                html += `<li>
+                            ${r.adresse} - Plads til: ${r.kapacitet}
+                            <button class="delete-btn" onclick="sletRum(${r.id})">Slet</button>
+                         </li>`;
             });
             html += "</ul>";
         } else {
@@ -63,6 +65,27 @@ function bygVisning3a() {
         html += "</div><hr>";
         container.innerHTML += html;
     });
+}
+
+// udfører sletningen i backenden
+async function sletRum(id) {
+    if (!confirm("Er du sikker på, at du vil slette dette rum?")) return;
+
+    // standard er GET-anmodning, derfor skal specificere at vi vil slette og ikke hente
+    try {
+        const response = await fetch(`${BASE_URL}/rooms/${id}`, {
+            method: 'DELETE' 
+        });
+
+        if (response.ok) {
+            // Opdaterer data og visning med det samme uden refresh
+            await hentAltData(); 
+        } else {
+            alert("Fejl: Kunne ikke slette rummet.");
+        }
+    } catch (fejl) {
+        console.error("Netværksfejl ved sletning:", fejl);
+    }
 }
 
 // DEL 3b: Samlet kapacitet per kommune
